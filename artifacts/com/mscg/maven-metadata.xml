@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <plugins>
+    <plugin>
+      <name>kotlin-native-maven-plugin</name>
+      <prefix>distribute</prefix>
+      <artifactId>kotlin-native-maven-plugin</artifactId>
+    </plugin>
+  </plugins>
+</metadata>
