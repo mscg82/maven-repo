@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mscg</groupId>
+        <artifactId>maven-repo</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>modules</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>mscg82</id>
+            <name>MscG82 Github repository</name>
+            <url>https://github.com/mscg82/maven-repo/artifacts</url>
+        </repository>
+    </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>mscg82</id>
+            <name>MscG82 Github repository</name>
+            <url>https://github.com/mscg82/maven-repo/artifacts</url>
+        </pluginRepository>    
+    </pluginRepositories>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <distributionManagement>
+        <repository>
+            <id>project.local</id>
+            <name>local repository</name>
+            <url>file:${project.basedir}/../artifacts</url>
+        </repository>
+        <snapshotRepository>
+            <id>project.local.snapshot</id>
+            <name>local repository snaposhots</name>
+            <url>file:${project.basedir}/../artifacts</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <modules>
+        <module>kotlin-native-maven-plugin</module>
+    </modules>
+</project>

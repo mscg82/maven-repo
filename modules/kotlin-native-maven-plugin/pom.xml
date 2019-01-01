@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mscg</groupId>
+        <artifactId>modules</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <artifactId>kotlin-native-maven-plugin</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    
+    <distributionManagement>
+        <repository>
+            <id>project.local</id>
+            <name>local repository</name>
+            <url>file:${project.basedir}/../../artifacts</url>
+        </repository>
+        <snapshotRepository>
+            <id>project.local.snapshot</id>
+            <name>local repository snaposhots</name>
+            <url>file:${project.basedir}/../../artifacts</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
