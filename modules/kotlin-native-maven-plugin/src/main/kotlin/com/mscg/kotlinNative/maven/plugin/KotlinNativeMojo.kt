@@ -90,6 +90,16 @@ class KotlinNativeMojo : ExecMojo() {
                     add("-opt");
                 }
 
+                val targetFolder = File(compiledFolder)
+                if (!targetFolder.exists()) {
+                    log.info("Creating target folder ${targetFolder.canonicalPath}")
+                    if (!targetFolder.mkdirs()) {
+                        throw MojoExecutionException("Failed to create target folder ${targetFolder.canonicalPath} for native executable")
+                    }
+                }
+                if (targetFolder.exists() && !targetFolder.isDirectory) {
+                    throw MojoExecutionException("Path ${targetFolder.canonicalPath} is not a folder that can contain the native executable")
+                }
                 val outputFile = File(compiledFolder, compiledFile).getCanonicalFile();
                 val path = outputFile.getPath().safeFileName();
                 log.info("Compiling application into basename $path");
