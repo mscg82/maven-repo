@@ -113,8 +113,8 @@ class KotlinNativeMojo : ExecMojo() {
                     .filter { it.exists() }
                     .flatMap { sourceBasedir ->
                         with(DirectoryScanner()) {
-                            includes = this@KotlinNativeMojo.includes
-                            excludes = this@KotlinNativeMojo.excludes
+                            setIncludes(this@KotlinNativeMojo.includes)
+                            setExcludes(this@KotlinNativeMojo.excludes)
                             basedir = sourceBasedir
                             scan()
                             
