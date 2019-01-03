@@ -24,6 +24,30 @@ class KotlinNativeMojo : ExecMojo() {
      */
     @Parameter
     private var excludes: Array<String>? = null
+    
+    /**
+     * The source directories containing the sources to be compiled.
+     */
+    @Parameter
+    private var sourceDirs: List<String>? = null
+        get() {
+            val dirs: MutableList<String> = mutableListOf()
+            val size = (field?.size ?: 0);
+            if (size != 0) {
+                dirs += field!!
+            }
+            else {
+                dirs += project.compileSourceRoots.map { it as String }
+            }
+            dirs += (additionalSourceDirs ?: listOf())
+            return dirs
+        }
+    
+    /**
+     * Additional source directories containing the sources to be compiled.
+     */
+    @Parameter
+    private var additionalSourceDirs: List<String>? = null
 
     /**
      * The folder in which the native executable will be placed. Defaults to <code>${project.build.directory}</code>
@@ -42,6 +66,12 @@ class KotlinNativeMojo : ExecMojo() {
      */
     @Parameter(property = "kotlin.optimizations", defaultValue = "false")
     private var optimizations: Boolean = false;
+        
+    /**
+     * Enable multiplatform features
+     */
+    @Parameter(property = "kotlin.multiPlatform", defaultValue = "false")
+    private var multiPlatform: Boolean = false
 
     private lateinit var _executable: FieldAccessor<String>;
 
@@ -67,7 +97,7 @@ class KotlinNativeMojo : ExecMojo() {
             throw MojoExecutionException("Failed to get arguments property", e);
         }
     }
-
+    
     @Suppress("UNCHECKED_CAST")
     @Throws(MojoExecutionException::class)
     override fun execute() {
@@ -89,6 +119,10 @@ class KotlinNativeMojo : ExecMojo() {
                 if (optimizations) {
                     add("-opt");
                 }
+                
+                if (multiPlatform) {
+                    add("-Xmulti-platform")
+                }
 
                 val targetFolder = File(compiledFolder)
                 if (!targetFolder.exists()) {
@@ -106,9 +140,10 @@ class KotlinNativeMojo : ExecMojo() {
                 add("-o");
                 add(path);
                 
-                log.debug("Listing sources with include filters ${includes?.contentToString() ?: "<empty>"} and exclude filters ${excludes?.contentToString() ?: "<empty>"}")
-                val sources: List<String> = project.compileSourceRoots.asSequence()
-                    .map { it as String }
+                if (log.isDebugEnabled) {
+                  log.debug("Listing sources with include filters ${includes?.contentToString() ?: "<empty>"} and exclude filters ${excludes?.contentToString() ?: "<empty>"}")                    
+                }
+                val sources: List<String> = (sourceDirs ?: listOf()).asSequence()
                     .map { File(it) }
                     .filter { it.exists() }
                     .flatMap { sourceBasedir ->
@@ -118,13 +153,16 @@ class KotlinNativeMojo : ExecMojo() {
                             basedir = sourceBasedir
                             scan()
                             
-                            includedFiles.asSequence()
-                                .map { File(sourceBasedir, it) }
+                            includedFiles.asSequence().map { File(sourceBasedir, it) }
                         }
                     }
                     .map { it.canonicalPath.safeFileName() }
                     .toList()
                 
+                if (log.isDebugEnabled) {
+                    log.debug("Source files:");
+                    sources.forEach { log.debug("  $it") }
+                }
                 log.info("Adding ${sources.size} files to command line arguments");
                 addAll(sources);
             }

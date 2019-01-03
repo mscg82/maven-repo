@@ -6,5 +6,10 @@
       <prefix>distribute</prefix>
       <artifactId>kotlin-native-maven-plugin</artifactId>
     </plugin>
+    <plugin>
+      <name>kotlin-native-maven-plugin</name>
+      <prefix>kotlin-native</prefix>
+      <artifactId>kotlin-native-maven-plugin</artifactId>
+    </plugin>
   </plugins>
 </metadata>
